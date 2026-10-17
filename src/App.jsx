@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import useLocalStorage from './hooks/useLocalStorage'
+import useScrollToHash from './hooks/useScrollToHash'
 import LoanForm from './components/LoanForm'
 import Summary from './components/Summary'
 import RepaymentChart from './components/RepaymentChart'
@@ -10,6 +11,7 @@ const defaultLoan = { principal: '', apr: '', termYears: '', monthsAlreadyPaid: 
 const defaultExtra = { extraMonthly: '', lumpSum: '' }
 
 export default function App() {
+  useScrollToHash()
   const [loan, setLoan] = useLocalStorage('lc-loan', defaultLoan)
   const [extra, setExtra] = useLocalStorage('lc-extra', defaultExtra)
 
