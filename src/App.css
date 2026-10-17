@@ -1,0 +1,398 @@
+:root {
+  --bg: #0e2f44;            /* whole-page background (packing) */
+  --field: #163e58;         /* inputs, one step lighter than the page */
+  --accent: #beb957;
+  --accent-text: #0e2f44;
+  --text: #f5f5f5;
+  --heading: #f5f5f5;
+  --muted: #c0d6e4;         /* light blue: labels, secondary text */
+  --line: rgba(70, 132, 153, 0.6);   /* teal #468499: dividers, borders */
+  --line-soft: rgba(70, 132, 153, 0.3);
+  --teal: #468499;
+  --success: #68976b;
+  --danger: #ffb4a3;
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 17px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.7;
+}
+
+.app { max-width: 680px; margin: 0 auto; padding: 72px 24px 120px; }
+
+/* ---------- Type ---------- */
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  color: var(--heading);
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+h1 { margin: 0 0 16px; font-size: 2.9rem; }
+h2 { margin: 0 0 28px; font-size: 1.7rem; }
+h3 { margin: 40px 0 14px; font-size: 1.3rem; color: var(--muted); }
+
+/* One or two words picked out in the accent colour within an otherwise
+   var(--heading) line — "Bill <span>Splitter</span>", a whole heading
+   like "Items", or a single word inside a longer line of text such as
+   the total amount's own "Total" label. */
+.accent-word { color: var(--accent); }
+
+.subhead { color: var(--muted); margin: 0 0 20px; font-size: 1.15rem; line-height: 1.6; }
+.muted { color: var(--muted); font-size: 1rem; margin: 0; }
+.muted.warn { color: var(--danger); }
+.label-row { font-size: 0.95rem; font-weight: 600; color: var(--muted); margin: 36px 0 14px; }
+
+/* ---------- Sections (no panels, just teal divider lines) ---------- */
+
+.section {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 48px 0;
+  margin-top: 48px;
+}
+.section + .section { margin-top: 0; border-top: none; }
+
+/* ---------- Form ---------- */
+
+/* Two columns, but every field spans the full width by default... */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 20px; }
+.grid > * { grid-column: 1 / -1; }
+
+/* ...except a plain, unmarked field — the item form's Price and Split,
+   which sit either side of each other below the full-width Item name
+   above them (that one's full span comes from its own ".wide" class,
+   same as it always has). Same escape-hatch idea as packing-list's trip
+   form uses for days/start date, just the opposite way round: there a
+   class pulls two fields OUT of the full-width default to share a line;
+   here the full-width default needs a matching opt-out for the fields
+   that were never meant to take it, since ".wide" alone doesn't undo
+   ".grid > *" for its un-classed siblings. */
+.grid > label:not(.wide) { grid-column: auto; }
+
+/* People form: a name field and its "Add" button on one line, with room
+   before the list of names that follows it. */
+.row { display: flex; gap: 20px; margin-bottom: 25px; }
+.row input { flex: 1; }
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+input, select {
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 400;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--teal);
+  border-radius: 12px;
+  background: var(--field);
+  color: var(--text);
+}
+select option { background: var(--bg); color: var(--text); }
+input::placeholder { color: #8fabbd; }
+
+/* Same Safari-specific reservation on the other side: a number input's
+   native up/down spin button also claims a sliver of height Safari doesn't
+   give back even once it's visually tiny, which is what was still leaving
+   Price a couple of pixels taller than Split after the select fix above.
+   Removing it (nobody taps tiny arrows to set a bill amount anyway) gets
+   Price down to the exact same box. */
+input[type="number"] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Safari renders a <select>'s native box a touch taller than a same-padding
+   <input> -- it reserves its own internal space for the dropdown arrow, so
+   this shows up in Safari's own inspector too, not only on a real device.
+   Stripping the native appearance and drawing a plain chevron in its place
+   makes Price and Split match exactly, in both height and look. */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 21px) center, calc(100% - 16px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+input:focus, select:focus, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+  font: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 13px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--teal);
+  background: transparent;
+  color: var(--text);
+}
+/* Empty/outline buttons (Remove, an unselected chip) already sit on the
+   transparent background; on hover the border and the text both pick up
+   the accent colour, rather than just the border as before. */
+button:hover { border-color: var(--accent); color: var(--accent); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Main action button — "Add" (a person) and "Add item", the two places
+   this app asks for a deliberate confirming tap rather than a quiet
+   toggle or a destructive "Remove". Same accent-filled treatment as
+   packing-list's plan-controls CTA, just available as its own class
+   since these buttons sit inline in a form rather than alone in that
+   row. On hover it inverts to match the outline buttons above: the
+   solid fill drops out to the page's own background, leaving an
+   accent-coloured stroke and label instead of just brightening. */
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+}
+button.primary:hover {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* "Shared by" chips: a grid rather than a wrapped flex row, so names
+   fill the full line and divide it evenly between however many there
+   are — two names get half each, three get a third each, and so on —
+   instead of each chip sizing to its own label and leaving the line's
+   remaining width empty. The 100px floor is what caps a row at five or
+   six names before it wraps, rather than squeezing an unlimited number
+   onto one line. 25px below separates the chips from "Add item". */
+.chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  margin-bottom: 25px;
+}
+/* Exactly two states, full stop -- no separate hover look to get stuck in
+   on a touch device (tapping a chip on mobile used to leave it stuck
+   showing its :hover style, which could look identical to -- or fight
+   with -- its actual selected/unselected state).
+   Unselected (default): solid teal fill, white label.
+   Selected (.chip-on): transparent fill, gold rim and label. */
+.chip {
+  width: 100%; border-radius: 999px; padding: 11px 20px; font-size: 1rem; text-align: center;
+  background: var(--teal); border-color: var(--teal); color: var(--text);
+}
+.chip-on {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+/* A chip is still a <button>, so the generic button:hover rule further
+   down (border/text to gold on :hover) would otherwise apply here too --
+   and a touch tap can leave an element matching :hover well after the
+   finger lifts, even on a screen that fails the (hover: hover) media
+   check below. These two reassert each state's own resting colours on
+   :hover itself (not gated by any media query, and winning the cascade
+   over the plain button:hover rule on specificity alone), so a tapped
+   chip can't get stuck showing a colour that belongs to neither state. */
+.chip:hover { border-color: var(--teal); color: var(--text); }
+.chip-on:hover { border-color: var(--accent); color: var(--accent); }
+
+/* A hover cue is fine, but only for a pointer that can actually hover
+   without getting stuck there -- a real mouse/trackpad, not a touchscreen
+   (where tapping would otherwise leave the chip showing this style after
+   the finger lifts, which is exactly what went wrong before). */
+@media (hover: hover) and (pointer: fine) {
+  .chip:not(.chip-on):hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+  .chip-on:hover {
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+/* A CTA that should take the full width of its container (the "Add item"
+   submit button sits below the full-width chips grid above). */
+.full-width { width: 100%; display: block; text-align: center; }
+
+.plan-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 44px;
+  margin-bottom: 44px;
+}
+
+.link-reset {
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  color: var(--muted);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.link-reset:hover { color: var(--accent); border: none; }
+
+/* Icon-only "remove" buttons (people, items) -- same pattern as
+   travel-planner's own delete icon: no border/background of its own,
+   sized to the icon, coloured gold, with a soft gold hover fill instead
+   of the usual border-goes-gold hover every other button has. */
+.icon-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; padding: 6px; border-radius: 6px;
+  color: var(--accent); cursor: pointer; line-height: 0; flex-shrink: 0;
+}
+.icon-button:hover { background: rgba(190, 185, 87, 0.15); border-color: transparent; }
+
+/* ---------- Messages (a coloured line on the left, no box) ---------- */
+
+.error { color: var(--danger); font-size: 1rem; }
+.empty { text-align: center; color: var(--muted); margin-top: 16px; }
+
+/* ---------- People / items / summary lists ---------- */
+
+.people-list, .items-list, .summary-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.people-list li, .items-list li, .summary-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line-soft);
+  font-size: 1.05rem;
+}
+.people-list li:first-child, .items-list li:first-child, .summary-list li:first-child { border-top: none; }
+.items-list li div { display: flex; flex-direction: column; gap: 4px; }
+
+.summary-list strong { font-family: var(--font-heading); font-weight: 600; color: var(--heading); }
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--line);
+}
+.summary-total strong { font-family: var(--font-heading); font-size: 1.4rem; color: var(--heading); }
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 560px) {
+  html { font-size: 16px; }
+  .app { padding: 44px 18px 96px; }
+  h1 { font-size: 2.3rem; }
+  h2 { font-size: 1.5rem; }
+  .section { padding: 36px 0; margin-top: 36px; }
+  .grid { gap: 22px 14px; }
+
+  /* The subtotal line ("Subtotal £24.00 + tax/tip £0.00") plus "Total
+     £24.00" side by side don't fit a phone's width at this type scale —
+     they were crowding into each other with no space between. Stacked
+     instead, same as the rest of this layout prefers a single column. */
+  .summary-total { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .row { gap: 14px; }
+}
+
+/* ---------- Stat cards (monthly payment, interest, time left) ---------- */
+
+/* Same "no boxes, just a divider" language as the rest of the page -- each
+   stat is its own column with a teal top rule, rather than a boxed tile,
+   so three of these sit together like a single wide stat strip. */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 28px;
+}
+.stat-card {
+  border-top: 2px solid var(--line);
+  padding-top: 16px;
+}
+.stat-card p { margin: 0 0 8px; }
+.stat-card strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--heading);
+  line-height: 1.2;
+}
+.stat-card strong.accent-word { color: var(--accent); }
+
+/* ---------- Repayment chart ---------- */
+
+.chart-wrap { margin-top: 8px; }
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.chart-legend-item { display: inline-flex; align-items: center; gap: 8px; }
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.chart-grid { stroke: var(--line-soft); stroke-width: 1; }
+.chart-axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: var(--font-body);
+}
+.chart-crosshair { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.chart-tooltip {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--field);
+  font-size: 0.95rem;
+  width: fit-content;
+}
+.chart-tooltip strong { font-family: var(--font-heading); color: var(--heading); }
+.chart-tooltip p { margin: 6px 0 0; display: flex; align-items: center; gap: 8px; }
+.chart-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+@media (max-width: 560px) {
+  .stat-grid { gap: 22px; }
+  .stat-card strong { font-size: 1.5rem; }
+}
