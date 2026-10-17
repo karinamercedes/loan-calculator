@@ -1,8 +1,8 @@
 :root {
-  --bg: #2a4642;            /* whole-page background */
-  --field: #39605a;         /* inputs, one step lighter than the page */
+  --bg: #0e4244;            /* whole-page background */
+  --field: #156366;         /* inputs, one step lighter than the page */
   --accent: #beb957;
-  --accent-text: #2a4642;
+  --accent-text: #0e4244;
   --text: #f5f5f5;
   --heading: #f5f5f5;
   --muted: #c0d6e4;         /* light blue: labels, secondary text */
@@ -338,16 +338,27 @@ button.primary:hover {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 28px;
 }
+/* Flex column so the label always starts at the same top line and the
+   figure always sits on the same bottom line, even when a longer label
+   ("Remaining balance, as of today") wraps to two lines and a shorter one
+   next to it ("Monthly payment") doesn't -- margin-top: auto on the figure
+   pushes it to the bottom of whatever height the row's tallest label makes
+   the card (stat-grid's own grid rows already stretch every card in a row
+   to match), so the numbers line up instead of the short card's number
+   floating higher than its neighbour's. */
 .stat-card {
   border-top: 2px solid var(--line);
   padding-top: 16px;
+  display: flex;
+  flex-direction: column;
 }
 .stat-card p { margin: 0 0 8px; }
 .stat-card strong {
   display: block;
+  margin-top: auto;
   font-family: var(--font-heading);
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--heading);
   line-height: 1.2;
 }

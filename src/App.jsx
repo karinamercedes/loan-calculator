@@ -64,11 +64,11 @@ export default function App() {
 
       {isValid ? (
         <>
-          <Summary analysis={analysis} hasAlreadyPaid={monthsAlreadyPaid > 0} />
+          <Summary analysis={analysis} />
 
           {chartSeries.length > 0 && !analysis.stuck && (
             <section className="section">
-              <h2>Balance over <span className="accent-word">time</span></h2>
+              <h2>Balance <span className="accent-word">overview</span></h2>
               <RepaymentChart series={chartSeries} />
             </section>
           )}

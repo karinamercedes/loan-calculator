@@ -16,6 +16,9 @@ export default function LoanForm({ loan, onChange }) {
             placeholder="e.g. 15000.00"
           />
         </label>
+        <p className="muted" style={{ marginTop: 15 }}>
+          Use a full stop for the pence (e.g. 1200.99), not a comma
+        </p>
         <label>
           Interest rate, APR (%)
           <input
@@ -44,10 +47,6 @@ export default function LoanForm({ loan, onChange }) {
           />
         </label>
       </div>
-      <p className="muted" style={{ marginTop: 10 }}>
-        Use a full stop for the pence (e.g. 1250.50), not a comma - this page always
-        reads amounts the UK/US way, whatever your keyboard or region normally uses.
-      </p>
       <p className="muted" style={{ marginTop: 10 }}>
         Assumes you've paid it as scheduled since you took it out - the extra-payment
         tool below is for anything beyond that.

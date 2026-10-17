@@ -48,7 +48,7 @@ export default function ExtraPaymentForm({ extra, onChange, result }) {
         </div>
       )}
       {result && result.monthsSaved <= 0 && result.interestSaved <= 0 && (Number(extra.extraMonthly) > 0 || Number(extra.lumpSum) > 0) && (
-        <p className="muted" style={{ marginTop: 16 }}>That doesn't change your payoff -- try a larger amount.</p>
+        <p className="muted" style={{ marginTop: 16 }}>That doesn't change your payoff - try a larger amount.</p>
       )}
     </section>
   )
