@@ -2,8 +2,8 @@
 
 A free, no-signup tool for working out what a loan actually costs -- the monthly payment, the total interest over its life, and what the balance looks like over time -- plus a simulator for what paying a bit extra would actually save you.
 
-**Live demo:** _add your Vercel link here once deployed_
-**Repo:** _add your GitHub link here_
+**Live demo:** https://loan-calculator-hazel-sigma.vercel.app/
+**Repo:** https://github.com/karinamercedes/loan-calculator
 
 ## Why this exists
 
