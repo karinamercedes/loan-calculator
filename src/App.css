@@ -1,8 +1,8 @@
 :root {
-  --bg: #3f6963;            /* whole-page background */
-  --field: #4e837b;         /* inputs, one step lighter than the page */
+  --bg: #2a4642;            /* whole-page background */
+  --field: #39605a;         /* inputs, one step lighter than the page */
   --accent: #beb957;
-  --accent-text: #3f6963;
+  --accent-text: #2a4642;
   --text: #f5f5f5;
   --heading: #f5f5f5;
   --muted: #c0d6e4;         /* light blue: labels, secondary text */
