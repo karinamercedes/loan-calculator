@@ -1,8 +1,8 @@
 :root {
-  --bg: #0e2f44;            /* whole-page background (packing) */
-  --field: #163e58;         /* inputs, one step lighter than the page */
+  --bg: #3f6963;            /* whole-page background */
+  --field: #4e837b;         /* inputs, one step lighter than the page */
   --accent: #beb957;
-  --accent-text: #0e2f44;
+  --accent-text: #3f6963;
   --text: #f5f5f5;
   --heading: #f5f5f5;
   --muted: #c0d6e4;         /* light blue: labels, secondary text */
@@ -395,4 +395,10 @@ button.primary:hover {
 @media (max-width: 560px) {
   .stat-grid { gap: 22px; }
   .stat-card strong { font-size: 1.5rem; }
+
+  /* Extra per month / One-off lump sum: these two share a line on desktop
+     via the ".grid > label:not(.wide)" override (see the top of this file),
+     but at phone width they go back to full-width, stacked -- narrow enough
+     together that the £ labels and number keyboard felt cramped. */
+  .extra-grid > label:not(.wide) { grid-column: 1 / -1; }
 }

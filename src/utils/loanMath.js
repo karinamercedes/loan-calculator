@@ -54,6 +54,16 @@ export function analyzeLoan({ principal, apr, termMonths, monthsAlreadyPaid = 0 
   const remainingTermMonths = Math.max(0, termMonths - monthsAlreadyPaid)
   const interestPaidSoFar = base.schedule.slice(0, clampedElapsed + 1).reduce((s, p) => s + p.interest, 0)
 
+  // Two different totals, both counted from *today* forward, not from the
+  // loan's start -- interestRemaining is just the interest still to come,
+  // and totalRepaymentRemaining is today's balance plus that interest (i.e.
+  // everything still to be handed over if the loan runs to term from here).
+  // Neither nets back to the original principal on its own: that only
+  // happens once you also add back interestPaidSoFar and the principal
+  // already repaid, which is the loan's full lifetime total instead.
+  const interestRemaining = base.totalInterest - interestPaidSoFar
+  const totalRepaymentRemaining = currentBalance + interestRemaining
+
   return {
     payment: base.payment,
     totalInterest: base.totalInterest,
@@ -62,6 +72,9 @@ export function analyzeLoan({ principal, apr, termMonths, monthsAlreadyPaid = 0 
     currentBalance,
     remainingTermMonths,
     interestPaidSoFar,
+    interestRemaining,
+    totalRepaymentRemaining,
+    principal,
     stuck: base.stuck,
   }
 }
@@ -92,6 +105,13 @@ export function simulateExtra({ principal, apr, termMonths, monthsAlreadyPaid = 
     monthsSaved: withoutExtra.monthsToPayoff - withExtra.monthsToPayoff,
     interestSaved: withoutExtra.totalInterest - withExtra.totalInterest,
   }
+}
+
+// Always exact to the penny -- nothing in this app rounds to whole pounds,
+// since that's what made an earlier explanation of these numbers look like
+// it didn't add up when it actually did.
+export function formatMoney(n) {
+  return `£${Number(n).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 export function formatMonths(months) {

@@ -1,10 +1,8 @@
-import { formatMonths } from '../utils/loanMath'
-
-const fmt = (n) => `£${Number(n).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`
+import { formatMoney, formatMonths } from '../utils/loanMath'
 
 export default function Summary({ analysis, hasAlreadyPaid }) {
   if (!analysis) return null
-  const { payment, totalInterest, currentBalance, remainingTermMonths, interestPaidSoFar, stuck } = analysis
+  const { payment, currentBalance, remainingTermMonths, totalRepaymentRemaining, interestRemaining, principal, stuck } = analysis
 
   if (stuck) {
     return (
@@ -23,24 +21,40 @@ export default function Summary({ analysis, hasAlreadyPaid }) {
       <div className="stat-grid">
         <div className="stat-card">
           <p className="muted">Monthly payment</p>
-          <strong>{fmt(payment)}</strong>
+          <strong>{formatMoney(payment)}</strong>
         </div>
         <div className="stat-card">
-          <p className="muted">{hasAlreadyPaid ? 'Remaining balance' : 'Total interest'}</p>
-          <strong>{fmt(hasAlreadyPaid ? currentBalance : totalInterest)}</strong>
+          <p className="muted">Remaining balance, as of today</p>
+          <strong>{formatMoney(currentBalance)}</strong>
         </div>
         <div className="stat-card">
           <p className="muted">Time left to pay it off</p>
           <strong>{formatMonths(remainingTermMonths)}</strong>
         </div>
       </div>
-      {hasAlreadyPaid && (
-        <p className="muted" style={{ marginTop: 20 }}>
-          You've paid about {fmt(interestPaidSoFar)} in interest so far, and
-          {' '}{fmt(totalInterest - interestPaidSoFar)} of interest is still ahead of you
-          if nothing changes.
-        </p>
-      )}
+
+      <div className="stat-grid" style={{ marginTop: 32 }}>
+        <div className="stat-card">
+          <p className="muted">Total repayment remaining</p>
+          <strong className="accent-word">{formatMoney(totalRepaymentRemaining)}</strong>
+        </div>
+        <div className="stat-card">
+          <p className="muted">of which, interest</p>
+          <strong className="accent-word">{formatMoney(interestRemaining)}</strong>
+        </div>
+      </div>
+
+      <p className="muted" style={{ marginTop: 20 }}>
+        "As of today" matters here: {formatMoney(currentBalance)} is what you'd owe if you
+        cleared this loan in one go right now. If you don't, and instead keep paying it off
+        over the time you have left, you'll hand back {formatMoney(totalRepaymentRemaining)}
+        {' '}in total from here -- that figure already includes the {formatMoney(currentBalance)}
+        {' '}balance plus the {formatMoney(interestRemaining)} of interest still to come.
+        {hasAlreadyPaid && (
+          <> (The original amount borrowed was {formatMoney(principal)} -- the gap between
+          that and today's balance is what you've already paid off.)</>
+        )}
+      </p>
     </section>
   )
 }

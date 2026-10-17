@@ -1,6 +1,4 @@
-import { formatMonths } from '../utils/loanMath'
-
-const fmt = (n) => `£${Number(n).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`
+import { formatMoney, formatMonths } from '../utils/loanMath'
 
 export default function ExtraPaymentForm({ extra, onChange, result }) {
   function set(field, value) {
@@ -13,26 +11,29 @@ export default function ExtraPaymentForm({ extra, onChange, result }) {
       <p className="muted" style={{ marginBottom: 20 }}>
         See what a bit more each month, or a one-off lump sum right now, actually buys you.
       </p>
-      <div className="grid">
+      <div className="grid extra-grid">
         <label>
           Extra per month (£)
           <input
-            type="number" min="0" step="5"
+            type="number" min="0" step="0.01"
             value={extra.extraMonthly}
             onChange={(e) => set('extraMonthly', e.target.value)}
-            placeholder="0"
+            placeholder="0.00"
           />
         </label>
         <label>
           One-off lump sum now (£)
           <input
-            type="number" min="0" step="50"
+            type="number" min="0" step="0.01"
             value={extra.lumpSum}
             onChange={(e) => set('lumpSum', e.target.value)}
-            placeholder="0"
+            placeholder="0.00"
           />
         </label>
       </div>
+      <p className="muted" style={{ marginTop: 10 }}>
+        Use a full stop for the pence (e.g. 50.00), not a comma.
+      </p>
 
       {result && (result.monthsSaved > 0 || result.interestSaved > 0) && (
         <div className="stat-grid" style={{ marginTop: 32 }}>
@@ -42,7 +43,7 @@ export default function ExtraPaymentForm({ extra, onChange, result }) {
           </div>
           <div className="stat-card">
             <p className="muted">Interest saved</p>
-            <strong className="accent-word">{fmt(result.interestSaved)}</strong>
+            <strong className="accent-word">{formatMoney(result.interestSaved)}</strong>
           </div>
         </div>
       )}

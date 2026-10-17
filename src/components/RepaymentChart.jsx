@@ -1,9 +1,13 @@
 import { useMemo, useState } from 'react'
+import { formatMoney } from '../utils/loanMath'
 
 const WIDTH = 640
 const HEIGHT = 300
 const PAD = { top: 20, right: 18, bottom: 32, left: 60 }
-const fmt = (n) => `£${Math.round(n).toLocaleString('en-GB')}`
+// Axis gridline labels stay rounded to whole pounds -- £11,250 reads faster
+// on a ruler than £11,250.37, and the gridline was never an exact value to
+// begin with. The tooltip (exact values on hover) uses formatMoney instead.
+const axisFmt = (n) => `£${Math.round(n).toLocaleString('en-GB')}`
 
 // series: [{ label, color, dash, data: [{month, balance}] }]
 // Always series[0] = the current plan. series[1], if present, is the
@@ -74,7 +78,7 @@ export default function RepaymentChart({ series }) {
         {yTicks.map((v) => (
           <g key={v}>
             <line x1={PAD.left} x2={WIDTH - PAD.right} y1={yFor(v)} y2={yFor(v)} className="chart-grid" />
-            <text x={PAD.left - 10} y={yFor(v) + 4} textAnchor="end" className="chart-axis-label">{fmt(v)}</text>
+            <text x={PAD.left - 10} y={yFor(v) + 4} textAnchor="end" className="chart-axis-label">{axisFmt(v)}</text>
           </g>
         ))}
 
@@ -115,7 +119,7 @@ export default function RepaymentChart({ series }) {
           {series.map((s) => (
             <p key={s.label}>
               <span className="chart-dot" style={{ background: s.color }} />
-              {s.label}: {fmt(balanceAt(s.data, hoverMonth))}
+              {s.label}: {formatMoney(balanceAt(s.data, hoverMonth))}
             </p>
           ))}
         </div>

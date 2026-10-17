@@ -10,10 +10,10 @@ export default function LoanForm({ loan, onChange }) {
         <label className="wide">
           Loan amount (£)
           <input
-            type="number" min="0" step="1"
+            type="number" min="0" step="0.01"
             value={loan.principal}
             onChange={(e) => set('principal', e.target.value)}
-            placeholder="e.g. 15000"
+            placeholder="e.g. 15000.00"
           />
         </label>
         <label>
@@ -44,8 +44,12 @@ export default function LoanForm({ loan, onChange }) {
           />
         </label>
       </div>
-      <p className="muted">
-        Assumes you've paid it as scheduled since you took it out -- the extra-payment
+      <p className="muted" style={{ marginTop: 10 }}>
+        Use a full stop for the pence (e.g. 1250.50), not a comma - this page always
+        reads amounts the UK/US way, whatever your keyboard or region normally uses.
+      </p>
+      <p className="muted" style={{ marginTop: 10 }}>
+        Assumes you've paid it as scheduled since you took it out - the extra-payment
         tool below is for anything beyond that.
       </p>
     </form>
