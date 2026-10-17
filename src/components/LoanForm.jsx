@@ -16,7 +16,7 @@ export default function LoanForm({ loan, onChange }) {
             placeholder="e.g. 15000.00"
           />
         </label>
-        <p className="muted" style={{ marginTop: 15 }}>
+        <p className="muted" style={{ marginTop: 7.5, marginBottom: 7.5 }}>
           Use a full stop for the pence (e.g. 1200.99), not a comma
         </p>
         <label>
@@ -47,7 +47,7 @@ export default function LoanForm({ loan, onChange }) {
           />
         </label>
       </div>
-      <p className="muted" style={{ marginTop: 10 }}>
+      <p className="muted" style={{ marginTop: 7.5 }}>
         Assumes you've paid it as scheduled since you took it out - the extra-payment
         tool below is for anything beyond that.
       </p>

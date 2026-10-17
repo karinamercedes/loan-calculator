@@ -412,4 +412,9 @@ button.primary:hover {
      but at phone width they go back to full-width, stacked -- narrow enough
      together that the £ labels and number keyboard felt cramped. */
   .extra-grid > label:not(.wide) { grid-column: 1 / -1; }
+
+  /* A lone third card in a 3-up stat-grid: two columns still fit at this
+     width, so without this it sits alone in column 1, half the row, with
+     dead space beside it instead of using the full line. */
+  .stat-card--full-mobile { grid-column: 1 / -1; }
 }
